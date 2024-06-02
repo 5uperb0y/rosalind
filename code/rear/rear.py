@@ -65,7 +65,3 @@ def rosalind_rear(path):
         str(rev_dist(lines[i], lines[i+1]))
         for i in range(0, len(lines), 2)
     ])
-        
-print(rosalind_rear("rear.input"))
-        
-
