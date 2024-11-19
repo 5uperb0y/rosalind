@@ -9,13 +9,13 @@ def edta(S, T):
         list: [Edit distance (str), aligned S (str), aligned T (str)]
     """
     dists = [ [0] * (len(T) + 1) for _ in range(len(S) + 1) ]
-    edits = [ [-1] * (len(T) + 1) for _ in range(len(S) + 1) ] # 0: match, 1: deletion, 2: insertion
+    edits = [ [-1] * (len(T) + 1) for _ in range(len(S) + 1) ] # 0: match, 1: insertion, 2: deletion
     for s in range(1, len(S) + 1):
         dists[s][0] = s
-        edits[s][0] = 1
+        edits[s][0] = 2
     for t in range(1, len(T) + 1):
         dists[0][t] = t
-        edits[0][t] = 2
+        edits[0][t] = 1
     # Fill DP tables
     for s in range(len(S)):
         for t in range(len(T)):
@@ -29,7 +29,7 @@ def edta(S, T):
     # Reconstruct aligned sequences
     aln_s, aln_t = "", ""
     x, y = len(S), len(T)
-    moves = [(1, 1), (0, 1), (1, 0)] # [match, deletion, insertion]
+    moves = [(1, 1), (0, 1), (1, 0)] # [match, insertion, deletion]
     while edits[x][y] >= 0:
         move_x, move_y = moves[edits[x][y]]
         aln_s = (S[x - 1] if move_x else "-") + aln_s
@@ -44,4 +44,4 @@ def rosalind_edta(path):
                 reads.append("")
             else:
                 reads[-1] = reads[-1] + line.strip()
-    print("\n".join(align(reads[0], reads[1])))
+    print("\n".join(edta(reads[0], reads[1])))
